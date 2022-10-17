@@ -98,13 +98,14 @@ df_rover_bft = df_rover_bft.union(df_1000046482)
 df_rover_bft = df_rover_bft.filter(df_rover_bft.VibromPeak.isNotNull())
 df_rover_bft = df_rover_bft.filter(df_rover_bft.numTP.isNotNull())
 
-#Cast della colonna VibromPEak da string a double
+#Cast della colonna VibromPeak da string a double
 
 df_rover_bft = df_rover_bft.withColumn("VibromPeak", df_rover_bft["VibromPeak"].cast("double"))
 
 #Calcolo del massimo di VibromPeak per tutti i Rover BF_T
 
 max_rover_bft_vibromPeak = df_rover_bft.select(max("VibromPeak")).collect()[0][0]
+print(f"\nmax_rover_bft_vibromPeak: {max_rover_bft_vibromPeak}\n")
 
 #Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP
 
@@ -178,7 +179,6 @@ del df_1000043951
 del df_1000045424
 del df_1000045962
 del df_1000046482
-del df_rover_bft
 
 #-------------------------------------Fine analisi Rover_BF_T-----------------------------------------------------------
 
@@ -299,6 +299,7 @@ df_rover_edge = df_rover_edge.withColumn("VibromPeak", df_rover_edge["VibromPeak
 #Calcolo del massimo di VibromPeak per tutti i Rover Edge
 
 max_rover_edge_vibromPeak = df_rover_edge.select(max("VibromPeak")).collect()[0][0]
+print(f"\nmax_rover_edge_vibromPeak: {max_rover_edge_vibromPeak}\n")
 
 #Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP
 
@@ -372,7 +373,7 @@ del df_1000045965
 del df_1000046506
 del df_1000047674
 del df_1000049364
-del df_rover_edge
+
 
 #-------------------------------------Fine analisi Rover_Edge-----------------------------------------------------------
 
@@ -494,9 +495,10 @@ df_rover_plast = df_rover_plast.filter(df_rover_plast.numTP.isNotNull())
 
 df_rover_plast = df_rover_plast.withColumn("VibromPeak", df_rover_plast["VibromPeak"].cast("double"))
 
-#Calcolo del massimo di VibromPeak per tutti i Rover Edge
+#Calcolo del massimo di VibromPeak per tutti i Rover Plast
 
 max_rover_plast_vibromPeak = df_rover_plast.select(max("VibromPeak")).collect()[0][0]
+print(f"\nmax_rover_plast_vibromPeak: {max_rover_plast_vibromPeak}\n")
 
 #Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP
 
@@ -563,7 +565,7 @@ del df_1000044949
 del df_1000045111
 del df_1000046652
 del df_1000047557
-del df_rover_plast
+
 
 #-------------------------------------Fine analisi Rover_Plast-----------------------------------------------------------
 
@@ -679,9 +681,10 @@ df_rover = df_rover.filter(df_rover.numTP.isNotNull())
 
 df_rover = df_rover.withColumn("VibromPeak", df_rover["VibromPeak"].cast("double"))
 
-#Calcolo del massimo di VibromPeak per tutti i Rover Edge
+#Calcolo del massimo di VibromPeak per tutti i Rover
 
-max_rover_plast_vibromPeak = df_rover.select(max("VibromPeak")).collect()[0][0]
+max_rover_vibromPeak = df_rover.select(max("VibromPeak")).collect()[0][0]
+print(f"\nmax_rover_vibromPeak: {max_rover_vibromPeak}\n")
 
 #Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP
 
@@ -748,7 +751,7 @@ del df_1000042645
 del df_1000041718 
 del df_1000044665  
 del df_1000044988 
-del df_rover
+
 
 #-------------------------------------Fine analisi Rover-----------------------------------------------------------
 
@@ -866,9 +869,10 @@ df_winline = df_winline.filter(df_winline.numTP.isNotNull())
 
 df_winline = df_winline.withColumn("VibromPeak", df_winline["VibromPeak"].cast("double"))
 
-#Calcolo del massimo di VibromPeak per tutti i Rover Edge
+#Calcolo del massimo di VibromPeak per tutti i Winline
 
-max_rover_plast_vibromPeak = df_winline.select(max("VibromPeak")).collect()[0][0]
+max_winline_vibromPeak = df_winline.select(max("VibromPeak")).collect()[0][0]
+print(f"\nmax_winline_vibromPeak: {max_winline_vibromPeak}\n")
 
 #Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP
 
@@ -935,6 +939,27 @@ del df_1000044941
 del df_1000047527 
 del df_1000048255  
 del df_1000049199 
-del df_winline
+
 
 #-------------------------------------Fine analisi Winline_report-----------------------------------------------------------
+#Esportazione dataset iniziale?
+
+'''
+df_completo = df_rover_bft.union(df_rover_edge) \
+                          .union(df_rover_plast) \
+                          .union(df_rover) \
+                          .union(df_winline)
+
+#Esportazione del dataset completo in CSV
+df_completo.coalesce(1) \
+            .write.option("header", True) \
+            .csv("Dataset Completo")
+
+
+del df_rover_bft
+del df_rover_edge
+del df_rover_plast
+del df_rover
+del df_winline
+del df_completo
+'''
