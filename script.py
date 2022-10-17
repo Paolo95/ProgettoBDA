@@ -86,8 +86,12 @@ df_1000046482 = df_1000046482.select("Serial_Number", "VibromPeak", "UTE", "ist_
 
 df_rover_bft = df_rover_bft.union(df_1000046482)
 
+#Filtraggio delle righe null di VibromPeak e numTP
+
 df_rover_bft = df_rover_bft.filter(df_rover_bft.VibromPeak.isNotNull())
 df_rover_bft = df_rover_bft.filter(df_rover_bft.numTP.isNotNull())
+
+#Cast della colonna VibromPEak da string a double
 
 df_rover_bft = df_rover_bft.withColumn("VibromPeak", df_rover_bft["VibromPeak"].cast("double"))
 
@@ -95,15 +99,30 @@ df_rover_bft = df_rover_bft.withColumn("VibromPeak", df_rover_bft["VibromPeak"].
 
 max_rover_bft_vibromPeak = df_rover_bft.select(max("VibromPeak")).collect()[0][0]
 
+#Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP
+
+df_rover_bft.groupBy("Serial_Number", "numTP") \
+            .max("VibromPeak") \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
+            .show()
+
 #Calcolo del massimo di VibromPeak per ogni Serial_Number
 
-df_rover_bft.groupBy("Serial_Number", "numTP").max("VibromPeak").show()
-
-df_rover_bft.groupBy("Serial_Number").max("VibromPeak").show()
+df_rover_bft.groupBy("Serial_Number") \
+            .max("VibromPeak") \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
+            .show()
 
 #Calcolo della mediana per ogni serial number
 
-df_rover_bft.groupBy("Serial_Number").agg(expr('percentile(VibromPeak, array(0.5))')[0].alias("Mediana")).show()
+df_rover_bft.groupBy("Serial_Number") \
+            .agg(expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
+            .show()
 
+#Calcolo della deviazione standard per ogni serial number
 
-df_rover_bft.groupBy("Serial_Number").agg({'VibromPeak': 'stddev'}).show()
+df_rover_bft.groupBy("Serial_Number") \
+            .agg({'VibromPeak': 'stddev'}) \
+            .withColumnRenamed("stddev(VibromPeak)","VibromPeak stdDev") \
+            .show()
+
