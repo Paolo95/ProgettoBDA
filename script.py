@@ -2,6 +2,9 @@ from pyspark.sql.functions import lit, max, expr
 
 #-------------------------------------Analisi dati su Rover_BF_T---------------------------------------------------------
 
+print("\n")
+print("----Analisi dati su Rover_BF_T----\n")
+
 PATH = 'Dataset/Rover_B_FT_report/1000037637/logbiesse1000037637.csv'
 
 df_1000037637 = spark.read.option("header",True).csv(PATH)
@@ -128,6 +131,7 @@ df_rover_bft.groupBy("Serial_Number") \
             .withColumnRenamed("stddev(VibromPeak)","VibromPeak stdDev") \
             .show()
 
+print("----Fine analisi dati Rover_BF_T----\n")
 #-------------------------------------Fine analisi Rover_BF_T-----------------------------------------------------------
 
 
