@@ -96,10 +96,10 @@ family_max_dataframe.show()
 print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni Serial_Number e numTP")
 
 family_sn_numTP_dataframe = complete_dataframe.groupBy("Family", "Serial_Number", "numTP") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak_median")) \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak_max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak_stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak_avg") \
             .orderBy("Family", "Serial_Number")
 
 family_sn_numTP_dataframe.show()
@@ -109,10 +109,10 @@ family_sn_numTP_dataframe.show()
 print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni Family, UTE, Serial_Number e numTP")
 
 family_ute_sn_numTP_dataframe = complete_dataframe.groupBy("Family", "UTE", "Serial_Number", "numTP") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak_median")) \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak_max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak_stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak_avg") \
             .orderBy("Family", "Serial_Number")
 
 family_ute_sn_numTP_dataframe.show()
@@ -122,10 +122,10 @@ family_ute_sn_numTP_dataframe.show()
 print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni numTP")
 
 family_numTP_dataframe = complete_dataframe.groupBy("Family", "numTP") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak_median")) \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak_max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak_stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak_avg") \
             .orderBy("Family", "numTP")
 
 family_numTP_dataframe.show()
@@ -135,10 +135,10 @@ family_numTP_dataframe.show()
 print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni UTE e numTP")
 
 family_ute_numTP_dataframe = complete_dataframe.groupBy("Family", "UTE", "numTP") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak_median")) \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak_max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak_stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak_avg") \
             .orderBy("Family", "numTP")
 
 family_ute_numTP_dataframe.show()
@@ -148,10 +148,10 @@ family_ute_numTP_dataframe.show()
 print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni Serial_Number")
 
 family_sn_dataframe = complete_dataframe.groupBy("Family", "Serial_Number") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median"))\
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak_median"))\
+            .withColumnRenamed("max(VibromPeak)","VibromPeak_max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak_stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak_avg") \
             .orderBy("Family", "Serial_Number")
 
 family_sn_dataframe.show()
@@ -161,10 +161,37 @@ family_sn_dataframe.show()
 print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni UTE e Serial_Number")
 
 family_ute_sn_dataframe = complete_dataframe.groupBy("Family", "UTE", "Serial_Number") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median"))\
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak_median"))\
+            .withColumnRenamed("max(VibromPeak)","VibromPeak_max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak_stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak_avg") \
             .orderBy("Family", "Serial_Number")
 
 family_ute_sn_dataframe.show()
+
+#Esportazione dei CSV
+
+complete_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Complete_dataset")
+family_max_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_max")
+family_sn_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_sn")
+family_numTP_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_numTP")
+family_sn_numTP_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_sn_numTP")
+family_ute_numTP_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_ute_numTP")
+family_ute_sn_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_ute_sn")
+family_ute_sn_numTP_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .save("Family_ute_sn_numTP")
