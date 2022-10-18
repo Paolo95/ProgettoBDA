@@ -1,4 +1,4 @@
-from pyspark.sql.functions import lit, max, expr, stddev
+from pyspark.sql.functions import lit, max, expr, stddev, avg
 import os
 from pyspark.sql.types import StructType, StructField, StringType
 
@@ -85,32 +85,41 @@ family_max_dataframe = family_max_dataframe.withColumn("VibromPeak_max", family_
 
 #Calcolo del massimo di VibromPeak per tutte le famiglie di macchinari
 
-family_max_dataframe = complete_dataframe.groupBy("Family").agg(max('VibromPeak').alias("VibromPeak_max"))
+print("Calcolo del massimo di VibromPeak per tutte le famiglie di macchinari")
 
-#Calcolo del massimo di VibromPeak per ogni Serial_Number e numTP di ogni macchinario
+family_max_dataframe = complete_dataframe.groupBy("Family").agg(max('VibromPeak').alias("VibromPeak_max")).show()
+
+#Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni Serial_Number e numTP
+
+print("Calcolo del massimo, mediana, devizione standard e media di VibromPeak per ogni Serial_Number e numTP di ogni macchinario")
 
 family_sn_numTP_max_dataframe = complete_dataframe.groupBy("Family", "Serial_Number", "numTP") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .orderBy("Family", "Serial_Number") \
+            .show()
+
+#Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni numTP
+
+print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni numTP")
+
+family_numTP_max_dataframe = complete_dataframe.groupBy("Family", "numTP") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
+            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
+            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
+            .withColumnRenamed("avg(VibromPeak)","VibromPeak avg") \
+            .orderBy("Family", "numTP") \
+            .show()
+
+#Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni Serial_Number
+
+print("Calcolo del massimo, mediana, deviazione standard e media di VibromPeak per ogni Serial_Number")
+
+family_sn_max_dataframe = complete_dataframe.groupBy("Family", "Serial_Number") \
+            .agg(max("VibromPeak"), stddev('VibromPeak'), avg("VibromPeak"), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median"))\
             .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
             .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
             .orderBy("Family", "Serial_Number") \
             .show()
-
-#Calcolo del massimo , mediana, deviazione standard di VibromPeak per ogni numTP
-
-family_numTP_max_dataframe = complete_dataframe.groupBy("Family", "numTP") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median")) \
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .orderBy("Family", "numTP")
-
-#Calcolo del massimo, deviazione standard di VibromPeak per ogni Serial_Number
-
-family_sn_max_dataframe = complete_dataframe.groupBy("Family", "Serial_Number") \
-            .agg(max("VibromPeak"), stddev('VibromPeak'), expr('percentile(VibromPeak, array(0.5))')[0].alias("VibromPeak median"))\
-            .withColumnRenamed("max(VibromPeak)","VibromPeak max") \
-            .withColumnRenamed("stddev_samp(VibromPeak)","VibromPeak stdDev") \
-            .orderBy("Family", "Serial_Number")
-
-#medie
-
