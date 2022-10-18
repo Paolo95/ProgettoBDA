@@ -173,25 +173,25 @@ family_ute_sn_dataframe.show()
 
 complete_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Complete_dataset")
+                    .csv("Complete_dataset")
 family_max_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_max")
+                    .csv("Family_max")
 family_sn_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_sn")
+                    .csv("Family_sn")
 family_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_numTP")
+                    .csv("Family_numTP")
 family_sn_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_sn_numTP")
+                    .csv("Family_sn_numTP")
 family_ute_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_ute_numTP")
+                    .csv("Family_ute_numTP")
 family_ute_sn_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_ute_sn")
+                    .csv("Family_ute_sn")
 family_ute_sn_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .save("Family_ute_sn_numTP")
+                    .csv("Family_ute_sn_numTP")
