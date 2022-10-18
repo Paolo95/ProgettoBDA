@@ -92,6 +92,8 @@ df_1000046482 = df_1000046482.select("Serial_Number", "VibromPeak", "UTE", "ist_
               "@timestamp", "numTP", "CurrentPeak", "DIAM", "LUNG", "idChiave")
 
 df_rover_bft = df_rover_bft.union(df_1000046482)
+df_rover_bft = df_rover_bft.withColumn("Family", lit("Rover_BF_T"))
+
 
 #Filtraggio delle righe null di VibromPeak e numTP
 
@@ -286,6 +288,7 @@ df_1000049364 = df_1000049364.select("Serial_Number", "VibromPeak", "UTE", "ist_
               "@timestamp", "numTP", "CurrentPeak", "DIAM", "LUNG", "idChiave")
 
 df_rover_edge = df_rover_edge.union(df_1000049364)
+df_rover_edge = df_rover_edge.withColumn("Family", lit("Rover_Edge"))
 
 #Filtraggio delle righe null di VibromPeak e numTP
 
@@ -485,6 +488,7 @@ df_1000047557 = df_1000047557.select("Serial_Number", "VibromPeak", "UTE", "ist_
               "@timestamp", "numTP", "CurrentPeak", "DIAM", "LUNG", "idChiave")
 
 df_rover_plast = df_rover_plast.union(df_1000047557)
+df_rover_plast = df_rover_plast.withColumn("Family", lit("Rover_Plast"))
 
 #Filtraggio delle righe null di VibromPeak e numTP
 
@@ -671,6 +675,7 @@ df_1000044988 = df_1000044988.select("Serial_Number", "VibromPeak", "UTE", "ist_
               "@timestamp", "numTP", "CurrentPeak", "DIAM", "LUNG", "idChiave")
 
 df_rover = df_rover.union(df_1000044988)
+df_rover = df_rover.withColumn("Family", lit("Rover"))
 
 #Filtraggio delle righe null di VibromPeak e numTP
 
@@ -859,6 +864,7 @@ df_1000049199 = df_1000049199.select("Serial_Number", "VibromPeak", "UTE", "ist_
               "@timestamp", "numTP", "CurrentPeak", "DIAM", "LUNG", "idChiave")
 
 df_winline = df_winline.union(df_1000049199)
+df_winline = df_winline.withColumn("Family", lit("Winline"))
 
 #Filtraggio delle righe null di VibromPeak e numTP
 
@@ -944,7 +950,7 @@ del df_1000049199
 #-------------------------------------Fine analisi Winline_report-----------------------------------------------------------
 #Esportazione dataset iniziale?
 
-'''
+
 df_completo = df_rover_bft.union(df_rover_edge) \
                           .union(df_rover_plast) \
                           .union(df_rover) \
@@ -953,7 +959,7 @@ df_completo = df_rover_bft.union(df_rover_edge) \
 #Esportazione del dataset completo in CSV
 df_completo.coalesce(1) \
             .write.option("header", True) \
-            .csv("Dataset Completo")
+            .csv("Dataset Completo/Dataset completo.csv")
 
 
 del df_rover_bft
@@ -961,5 +967,12 @@ del df_rover_edge
 del df_rover_plast
 del df_rover
 del df_winline
-del df_completo
-'''
+
+
+print(max_rover_bft_vibromPeak)
+
+print(max_rover_edge_vibromPeak)
+
+print(max_rover_vibromPeak)
+
+print(max_winline_vibromPeak)
