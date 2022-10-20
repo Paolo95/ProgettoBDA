@@ -1,6 +1,8 @@
-from pyspark.sql.functions import lit, max, expr, stddev, avg
+from pyspark.sql.functions import lit, max, expr, stddev, avg, unix_timestamp
 import os
 from pyspark.sql.types import StructType, StructField, StringType
+
+format = "yyyy-MM-dd'T'HH:mm:ss:SSSZ" 
 
 complete_dataframe_schema = StructType([
     StructField('Serial_Number', StringType(), True),
@@ -169,8 +171,15 @@ family_ute_sn_dataframe = complete_dataframe.groupBy("Family", "UTE", "Serial_Nu
 
 family_ute_sn_dataframe.show()
 
-#Esportazione dei CSV
+#Cast della colonna @timestamp da string a timestamp
 
+complete_dataframe = complete_dataframe.withColumn("@timestamp", unix_timestamp('@timestamp', format).cast('timestamp'))
+
+ts_dataframe = complete_dataframe.select("@timestamp", "Family", "numTP", "VibromPeak") \
+            .orderBy("@timestamp","Family", "numTP")
+
+#Esportazione dei CSV
+'''
 complete_dataframe.coalesce(1) \
                     .write.option("header", "true") \
                     .csv("Complete_dataset")
@@ -195,3 +204,7 @@ family_ute_sn_dataframe.coalesce(1) \
 family_ute_sn_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
                     .csv("Family_ute_sn_numTP")
+ts_dataframe.coalesce(1) \
+                    .write.option("header", "true") \
+                    .csv("TimeStamp_dataframe")
+'''
