@@ -1,5 +1,6 @@
 from pyspark.sql.functions import lit, max, expr, stddev, avg, unix_timestamp
 import os
+import shutil
 from pyspark.sql.types import StructType, StructField, StringType
 
 format = "yyyy-MM-dd'T'HH:mm:ss:SSSZ" 
@@ -31,19 +32,24 @@ family_max_dataframe_schema = StructType([
 complete_dataframe = spark.createDataFrame([], complete_dataframe_schema)
 family_max_dataframe = spark.createDataFrame([], family_max_dataframe_schema)
 
-def dataset_index(directory):
+def folder_index(directory, name_selected_folder):
     for index in range(len(directory)):
-        if directory[index] == "Dataset":
+        if directory[index] == str(name_selected_folder):
             index_of_element = index
             return index_of_element
 
 
-csv_extention = ".csv"
+#csv_extention = ".csv"
 directory =  os.listdir()
+
+if "Output" in directory:
+    print("Cartella di Output già presente, verrà eliminata")
+    shutil.rmtree('Output')
+
 print("------------------------------------------------------------------------")
 print("\n")
 
-for filename in os.scandir(directory[dataset_index(directory)]):
+for filename in os.scandir(directory[folder_index(directory, "Dataset")]):
     folder_object = filename.path
     folder_object_name = folder_object.split("/")
     for filename in os.scandir(folder_object):
@@ -55,7 +61,7 @@ for filename in os.scandir(directory[dataset_index(directory)]):
             if filename.is_file():
                 file_object = filename.path
                 file_object_name = file_object.split("/")
-                if csv_extention in file_object:
+                if file_object.endswith('.csv'):
                     PATH = file_object
                     if(complete_dataframe.count() == 0):
                         complete_dataframe = spark.read.option("header",True).csv(PATH) \
@@ -201,3 +207,31 @@ family_ute_sn_dataframe.coalesce(1) \
 family_ute_sn_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
                     .csv("Output/Family_ute_sn_numTP")
+
+#=========================================================
+
+directory =  os.listdir()
+
+for filename in os.scandir(directory[folder_index(directory, "Output")]):
+    folder_object_name = folder_object.split("/")
+    subdirectory = filename.path
+    '''
+    for filename in os.scandir(folder_object):
+        subdirectory = filename.path
+        subdirectory_name = subdirectory.split("/")
+        serial_number_extracted = str(subdirectory_name[2])
+        family_name_extracted = str(subdirectory_name[1])
+        print(subdirectory_name)
+    '''
+    for filename in os.scandir(subdirectory):
+        if filename.is_file():
+            file_object = filename.path
+            file_object_name = file_object.split("/")
+            if file_object.endswith('.csv'):
+                current_file = file_object
+                current_directory = str(file_object_name[0]) + "/" + str(file_object_name[1]) + "/"
+                renamed_file = str(file_object_name[1]) + str(".csv")
+                new_file_object = current_directory  + renamed_file
+                os.rename(current_file, new_file_object)
+            else:
+                os.remove(file_object)
