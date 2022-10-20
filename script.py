@@ -175,36 +175,29 @@ family_ute_sn_dataframe.show()
 
 complete_dataframe = complete_dataframe.withColumn("@timestamp", unix_timestamp('@timestamp', format).cast('timestamp'))
 
-ts_dataframe = complete_dataframe.select("@timestamp", "Family", "numTP", "VibromPeak") \
-            .orderBy("@timestamp","Family", "numTP")
-
 #Esportazione dei CSV
-'''
+
 complete_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Complete_dataset")
+                    .csv("Output/Complete_dataset")
 family_max_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_max")
+                    .csv("Output/Family_max")
 family_sn_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_sn")
+                    .csv("Output/Family_sn")
 family_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_numTP")
+                    .csv("Output/Family_numTP")
 family_sn_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_sn_numTP")
+                    .csv("Output/Family_sn_numTP")
 family_ute_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_ute_numTP")
+                    .csv("Output/Family_ute_numTP")
 family_ute_sn_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_ute_sn")
+                    .csv("Output/Family_ute_sn")
 family_ute_sn_numTP_dataframe.coalesce(1) \
                     .write.option("header", "true") \
-                    .csv("Family_ute_sn_numTP")
-ts_dataframe.coalesce(1) \
-                    .write.option("header", "true") \
-                    .csv("TimeStamp_dataframe")
-'''
+                    .csv("Output/Family_ute_sn_numTP")
