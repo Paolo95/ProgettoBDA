@@ -1,9 +1,13 @@
 from pyspark.sql.functions import lit, max, expr, stddev, avg, unix_timestamp
 import os
 import shutil
+import time
+import zipfile
 from pyspark.sql.types import StructType, StructField, StringType
 
 format = "yyyy-MM-dd'T'HH:mm:ss:SSSZ" 
+
+start_time = time.time()
 
 complete_dataframe_schema = StructType([
     StructField('Serial_Number', StringType(), True),
@@ -39,8 +43,9 @@ def folder_index(directory, name_selected_folder):
             return index_of_element
 
 
-#csv_extention = ".csv"
 directory =  os.listdir()
+
+print("\n")
 
 if "Output" in directory:
     print("Cartella di Output già presente, verrà eliminata")
@@ -209,6 +214,8 @@ family_ute_sn_numTP_dataframe.coalesce(1) \
                     .csv("Output/Family_ute_sn_numTP")
 
 #=========================================================
+#Rinomino i file...
+
 
 directory =  os.listdir()
 
@@ -235,3 +242,58 @@ for filename in os.scandir(directory[folder_index(directory, "Output")]):
                 os.rename(current_file, new_file_object)
             else:
                 os.remove(file_object)
+
+def zip_dir(dirpath, zippath):
+    fzip = zipfile.ZipFile(zippath, 'w', zipfile.ZIP_DEFLATED)
+    basedir = os.path.dirname(dirpath) + '/' 
+    for root, dirs, files in os.walk(dirpath):
+        if os.path.basename(root)[0] == '.':
+            continue #skip hidden directories        
+        dirname = root.replace(basedir, '')
+        for f in files:
+            if f[-1] == '~' or (f[0] == '.' and f != '.htaccess'):
+                #skip backup files and all hidden files except .htaccess
+                continue
+            fzip.write(root + '/' + f, dirname + '/' + f)
+    fzip.close()
+
+directory =  os.listdir()
+
+if "Output.zip" in directory:
+    print("Output.zip esiste, verrà eliminato")
+    os.remove("Output.zip")
+    output_filename = "Output"
+    print("Compressione Output nel file Output.zip...")
+    zip_dir("Output", "Output.zip")
+    print("Output.zip creato.")
+else:
+    output_filename = "Output"
+    print("Compressione Output nel file Output.zip...")
+    zip_dir("Output", "Output.zip")
+    print("Output.zip creato.")
+
+def convert_time(sec):
+    hour_str = ""
+    minutes_str = ""
+    secs_str = ""
+    sec = sec % (24 * 3600)
+    hour = sec // 3600
+    sec %= 3600
+    min = sec // 60
+    sec %= 60
+    if(hour == 0):
+        hour_str = ""
+    else:
+        hour_str = str(int(hour)) + "h"
+    if(min == 0):
+        minutes_str = ""
+    else:
+        minutes_str = str(int(min)) + "m"
+    secs_str = str(int(sec)) + "s"
+    time_string = hour_str + minutes_str + secs_str
+    return time_string
+
+end_time = time.time()
+time_passed = end_time - start_time
+print("===========================================================")
+print("Processo completato in : " + str(convert_time(time_passed)))
