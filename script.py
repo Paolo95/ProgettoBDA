@@ -250,6 +250,7 @@ def zip_dir(dirpath, zippath):
         if os.path.basename(root)[0] == '.':
             continue #skip hidden directories        
         dirname = root.replace(basedir, '')
+        dirname = dirname.replace("Output", '')
         for f in files:
             if f[-1] == '~' or (f[0] == '.' and f != '.htaccess'):
                 #skip backup files and all hidden files except .htaccess
@@ -281,13 +282,9 @@ def convert_time(sec):
     sec %= 3600
     min = sec // 60
     sec %= 60
-    if(hour == 0):
-        hour_str = ""
-    else:
+    if(hour != 0):
         hour_str = str(int(hour)) + "h"
-    if(min == 0):
-        minutes_str = ""
-    else:
+    if(min != 0):
         minutes_str = str(int(min)) + "m"
     secs_str = str(int(sec)) + "s"
     time_string = hour_str + minutes_str + secs_str
